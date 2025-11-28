@@ -17,6 +17,10 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import type {
+  PlannerConfigDoc,
+  PlannerConfigRequest,
+} from "@/types/planner";
 
 // Example user type
 export interface UserDoc extends DocumentData {
@@ -88,16 +92,53 @@ export const userOperations = {
     try {
       const q = query(collections.users, where(field, operator, value));
       const querySnapshot = await getDocs(q);
-      
+
       const users: UserDoc[] = [];
       querySnapshot.forEach((doc) => {
         users.push(doc.data() as UserDoc);
       });
-      
+
       return users;
     } catch (error) {
       console.error("Error querying users:", error);
       return [];
     }
+  },
+};
+
+// Planner config document path: users/{uid}/plannerConfig/config
+export function getPlannerConfigRef(uid: string): DocumentReference<PlannerConfigDoc> {
+  if (!db || Object.keys(db).length === 0) {
+    return {} as DocumentReference<PlannerConfigDoc>;
+  }
+  return doc(db, "users", uid, "plannerConfig", "config") as DocumentReference<PlannerConfigDoc>;
+}
+
+// Planner config operations
+export const plannerConfigOperations = {
+  // Fetch planner config for a user
+  async fetch(uid: string): Promise<PlannerConfigDoc | null> {
+    try {
+      const configRef = getPlannerConfigRef(uid);
+      const configSnap = await getDoc(configRef);
+
+      if (!configSnap.exists()) {
+        return null;
+      }
+
+      return configSnap.data() as PlannerConfigDoc;
+    } catch (error) {
+      console.error("Error fetching planner config:", error);
+      return null;
+    }
+  },
+
+  // Create or update planner config
+  async upsert(uid: string, data: PlannerConfigRequest): Promise<void> {
+    const configRef = getPlannerConfigRef(uid);
+    await setDoc(configRef, {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
   },
 };

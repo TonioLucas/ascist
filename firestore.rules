@@ -6,10 +6,15 @@ service cloud.firestore {
     function belongsTo(userId) {
       return request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Users can read/write their own user document
     match /users/{userId} {
       allow read, write: if belongsTo(userId);
+
+      // Planner config subcollection - users can only access their own planner config
+      match /plannerConfig/{docId} {
+        allow read, write: if belongsTo(userId);
+      }
     }
 
     // Categories - users can only access their own categories
@@ -20,7 +25,7 @@ service cloud.firestore {
     // Items - users can only access their own items
     match /items/{itemId} {
       allow read, write: if belongsTo(userId);
-      
+
       // Item activities subcollection
       match /activities/{activityId} {
         allow read, write: if belongsTo(userId);

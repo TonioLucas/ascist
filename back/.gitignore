@@ -5,7 +5,9 @@ __pycache__/
 
 # C extensions
 *.so
-blank-test-project-firebase-adminsdk-k2n85-7570e24581.json
+
+# Firebase Admin SDK credentials
+*-firebase-adminsdk-*.json
 
 # Distribution / packaging
 .Python

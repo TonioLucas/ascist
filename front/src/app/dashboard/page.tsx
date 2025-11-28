@@ -4,18 +4,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/auth/useAuth";
 import { authOperations } from "@/auth/authOperations";
-import {
-  Container,
-  Typography,
-  Button,
-  Box,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-} from "@mui/material";
-import { Person, Storage, Functions, CloudUpload } from "@mui/icons-material";
+import { Button } from "@/components/ui/button";
+import { t } from "@/lib/i18n";
+import { LogOut } from "lucide-react";
+import { PlannerConfig } from "./components";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -30,7 +22,7 @@ export default function DashboardPage() {
   const handleSignOut = async () => {
     try {
       await authOperations.signOut();
-      router.push("/");
+      router.push("/signin");
     } catch (error) {
       console.error("Failed to sign out:", error);
     }
@@ -38,9 +30,9 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-        <Typography>Loading...</Typography>
-      </Box>
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-muted-foreground">{t("common.loading")}</p>
+      </div>
     );
   }
 
@@ -48,98 +40,29 @@ export default function DashboardPage() {
     return null;
   }
 
+  const displayName = user?.displayName || user?.email || "";
+
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
-        <Typography variant="h4" component="h1">
-          Dashboard
-        </Typography>
-        <Button variant="outlined" color="error" onClick={handleSignOut}>
-          Sign Out
-        </Button>
-      </Box>
+    <div className="min-h-screen bg-background">
+      <header className="border-b">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <h1 className="text-xl font-semibold">{t("app.name")}</h1>
+          <Button variant="ghost" size="sm" onClick={handleSignOut}>
+            <LogOut className="mr-2 h-4 w-4" />
+            {t("auth.signout")}
+          </Button>
+        </div>
+      </header>
 
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Welcome back, {user?.displayName || user?.email}!
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          User ID: {user?.uid}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Email verified: {user?.emailVerified ? "Yes" : "No"}
-        </Typography>
-      </Paper>
+      <main className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold">
+            {t("dashboard.welcome", { name: displayName })}
+          </h2>
+        </div>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Person color="primary" sx={{ mr: 2 }} />
-                <Typography variant="h6">Profile</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Manage your user profile and settings
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">View Profile</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Storage color="primary" sx={{ mr: 2 }} />
-                <Typography variant="h6">Database</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Firestore database operations
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Explore</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <CloudUpload color="primary" sx={{ mr: 2 }} />
-                <Typography variant="h6">Storage</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Upload and manage files
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Upload Files</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Functions color="primary" sx={{ mr: 2 }} />
-                <Typography variant="h6">Functions</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Call Firebase Functions
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Test Function</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </Container>
+        <PlannerConfig />
+      </main>
+    </div>
   );
 }
