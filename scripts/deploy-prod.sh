@@ -16,12 +16,8 @@ echo -e "${GREEN}=== ascist Production Deploy ===${NC}"
 cd "$(dirname "$0")/.."
 
 # Safety guard: Check if connected to the correct Firebase project
-CURRENT_PROJECT=$(firebase use 2>/dev/null | grep -oP '(?<=Active Project: )\S+' || true)
-
-if [ -z "$CURRENT_PROJECT" ]; then
-  # Try alternative method
-  CURRENT_PROJECT=$(firebase projects:list 2>/dev/null | grep "(current)" | awk '{print $2}' || true)
-fi
+# Strip ANSI color codes, find (current) line, extract project ID
+CURRENT_PROJECT=$(firebase projects:list 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | grep "(current)" | awk -F'│' '{gsub(/[[:space:]]|\(current\)/, "", $3); print $3}' || true)
 
 if [ "$CURRENT_PROJECT" != "$EXPECTED_PROJECT" ]; then
   echo -e "${RED}ERROR: Not connected to production project!${NC}"
