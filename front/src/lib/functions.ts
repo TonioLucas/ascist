@@ -34,3 +34,33 @@ export async function callFunction<TRequest, TResponse>(
   const result = await callable(data);
   return result.data;
 }
+
+// Calendar export types
+export interface ExportCalendarRequest {
+  weekStartISO: string; // YYYY-MM-DD Monday
+  timezone: string; // e.g., "America/Sao_Paulo"
+}
+
+export interface ExportCalendarResponse {
+  success: boolean;
+  weekStartISO: string;
+  exportedCount: number;
+  overwrittenCount: number;
+  calendarEventIds: Record<string, string>; // slotId -> Google eventId
+  calendarId: string;
+  message?: string;
+}
+
+/**
+ * Call the export_calendar_callable function
+ */
+export async function exportCalendar(
+  request: ExportCalendarRequest
+): Promise<ExportCalendarResponse> {
+  const callable = httpsCallable<ExportCalendarRequest, ExportCalendarResponse>(
+    functions,
+    "export_calendar_callable"
+  );
+  const result: HttpsCallableResult<ExportCalendarResponse> = await callable(request);
+  return result.data;
+}

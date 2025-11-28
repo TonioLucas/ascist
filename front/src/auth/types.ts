@@ -1,5 +1,3 @@
-import { User } from "firebase/auth";
-
 export interface AuthUser {
   uid: string;
   email: string | null;
@@ -7,6 +5,7 @@ export interface AuthUser {
   photoURL: string | null;
   emailVerified: boolean;
   isAnonymous: boolean;
+  providerId: string | null;
 }
 
 export interface AuthState {

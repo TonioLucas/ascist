@@ -15,6 +15,11 @@ service cloud.firestore {
       match /plannerConfig/{docId} {
         allow read, write: if belongsTo(userId);
       }
+
+      // Weekly plans subcollection - users can only access their own weekly plans
+      match /weeklyPlans/{weekId} {
+        allow read, write: if belongsTo(userId);
+      }
     }
 
     // Categories - users can only access their own categories

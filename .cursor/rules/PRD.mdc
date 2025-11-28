@@ -4,39 +4,39 @@ globs:
 alwaysApply: false
 ---
 
-# <Product / Feature Name>
+# ascist
 
-<TL;DR: 1–2 sentences: For [target user], build [capability] so they can [value].>
+For individuals who want to align long-term goals with weekly and daily chores, build a planning system so they can document six-month objectives, break them into weekly tasks, and execute them with confidence.
 
 ---
 
 ## Users & Value
 
-- **Primary user / persona:** <who specifically>
+- **Primary user / persona:** Young, ambitious Brazilians who completed the Imersão Ascensão weekend and want a digital companion for Augusto Weber’s Método Ascensão de Gestão de Tempo.
 - **Jobs-to-be-done (JTBD):**
-  - When <situation>, I want <motivation>, so I can <outcome>.
-  - When <situation>, I want <motivation>, so I can <outcome>.
+  - When I already have meus grandes objetivos de vida definidos após a imersão, I want an interface to break them into pequenas tarefas diárias so I can acompanhar o progresso constantemente.
+  - When I defino objetivos e tarefas em cada Farol, I want to distribuir tudo na agenda semanal and exportar para o Google Calendar (sobrescrevendo versões anteriores) so I can executar o plano sem fricção.
 
 ---
 
 ## Success Metrics
 
-- **Primary Goal:** <what success looks like in plain words>
-- **Success Criteria:** <what you will measure, with formula> (target: <value>)
+- **Primary Goal:** Users arrange their weekly schedule with one-hour slots, color-coded Faróis, and sync their plan to Google Calendar.
+- **Success Criteria:** TBD – no quantitative metric defined yet.
 
 ---
 
 ## Scope
 
-| Must‑have (MVP) | Nice‑to‑have (Later) | Explicitly Out (Not now) |
+| Must‑have (MVP) | Nice‑to-have (Later) | Explicitly Out (Not now) |
 | --------------- | -------------------- | ------------------------ |
-| <bullet>        | <bullet>             | <bullet>                 |
-| <bullet>        | <bullet>             | <bullet>                 |
+| Google authentication, pt-BR localization, and onboarding tied to the Método Ascensão. | Drag-and-drop “post-it” style interface for tarefas. | Integrations beyond Google Calendar. |
+| Objetivos (3 macro metas) where every tarefa associada é Farol 1 (roxo) por definição, alongside Farol 2 compromissos, Farol 3 hábitos, Tempo Coringa e Desvio de Rota cards present in the weekly planner; one-hour slot view, next-action spotlight, Google Calendar export that overwrites the same week, user profile & settings. | Backlog de tarefas futuras, monthly/yearly calendar, “Por quem’s” inspirational album, “Seja sua palavra” guidance section. | Sharing or social features. |
 
 - **Definition of Done (MVP):**
-  - [ ] <clear acceptance criterion 1>
-  - [ ] <clear acceptance criterion 2>
-  - [ ] <clear acceptance criterion 3>
+  - [ ] Objetivos, Faróis e tarefas persistem no Firestore e aparecem em toda a interface 100% em pt-BR.
+  - [ ] Usuário autenticado via Google consegue planejar a semana em blocos de 1 hora com cores Farol e visualizar próximos passos do dia.
+  - [ ] Exportação para Google Calendar usa a mesma conta e sobrescreve eventos anteriormente criados pelo app para a mesma semana.
 
 ---
 
@@ -45,18 +45,17 @@ alwaysApply: false
 ### Frontend:
 
 - Next.js with TypeScript
-- React for UI components
+- React + ShadCN UI components
 - Tailwind CSS for styling
-- Firebase Authentication for user management
+- Firebase Authentication (Google sign-in, optional email/password)
 
 ### Backend:
 
-- Firebase Functions (Python) for video processing
-- 11Labs API for AI voice synthesis
-- FFmpeg for audio/video manipulation
-- Firebase Storage for video file storage
+- Firebase Functions (Python) for business logic and Google Calendar integration
+- Google Calendar API access for exports
+- Firebase Admin SDK for data orchestration
 
 ### Database:
 
-- Firebase Firestore for user data and processing metadata
-- Firebase Storage for video assets and processed files
+- Firebase Firestore for objetivos, tarefas, Faróis, and planner metadata
+- Firebase Storage for any user-uploaded assets (e.g., reference materials)

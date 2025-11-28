@@ -17,6 +17,7 @@ export function useAuthInit(
       auth,
       (firebaseUser) => {
         if (firebaseUser) {
+          const providerId = firebaseUser.providerData[0]?.providerId || null;
           const authUser: AuthUser = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
@@ -24,6 +25,7 @@ export function useAuthInit(
             photoURL: firebaseUser.photoURL,
             emailVerified: firebaseUser.emailVerified,
             isAnonymous: firebaseUser.isAnonymous,
+            providerId,
           };
           setUser(authUser);
         } else {

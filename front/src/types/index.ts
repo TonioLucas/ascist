@@ -4,3 +4,4 @@ export * from './common';
 export * from './firestore';
 export * from './planner';
 export * from './plannerSchema';
+export * from './weeklyPlan';

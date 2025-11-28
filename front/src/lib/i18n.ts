@@ -86,6 +86,51 @@ const translations: Record<string, string> = {
   "planner.objetivo.prazo": "Prazo",
   "planner.objetivo.tarefas": "Tarefas (Farol 1)",
   "planner.objetivo.tarefas.placeholder": "Adicionar tarefa...",
+
+  // Weekly Planner
+  "weeklyPlanner.title": "Pergaminho Semanal",
+  "weeklyPlanner.hour": "Hora",
+  "weeklyPlanner.today": "Hoje",
+  "weeklyPlanner.assignSlot": "Atribuir atividade",
+  "weeklyPlanner.clearSlot": "Limpar slot",
+
+  // Weekly Planner - Slot assignment sections
+  "weeklyPlanner.farol1.section": "Farol 1 - Tarefas dos Objetivos",
+  "weeklyPlanner.farol1.empty": "Adicione tarefas aos seus objetivos primeiro",
+  "weeklyPlanner.farol2.section": "Farol 2 - Compromissos",
+  "weeklyPlanner.farol2.empty": "Nenhum compromisso cadastrado",
+  "weeklyPlanner.farol3.section": "Farol 3 - Hábitos",
+  "weeklyPlanner.farol3.empty": "Nenhum hábito cadastrado",
+  "weeklyPlanner.tempoCoringa.section": "Tempo Coringa",
+  "weeklyPlanner.tempoCoringa.empty": "Nenhum tempo coringa cadastrado",
+  "weeklyPlanner.desvioDeRota.section": "Desvio de Rota",
+  "weeklyPlanner.desvioDeRota.empty": "Nenhum desvio cadastrado",
+
+  // Weekly Planner - Next actions
+  "weeklyPlanner.nextActions.title": "Próximas ações de hoje",
+  "weeklyPlanner.nextActions.empty": "Nenhuma atividade programada para hoje",
+  "weeklyPlanner.nextActions.more": "mais",
+
+  // Weekly Planner - Insights
+  "weeklyPlanner.insights.title": "Insights da semana",
+  "weeklyPlanner.insights.placeholder": "Anote reflexões, aprendizados e observações sobre sua semana...",
+  "weeklyPlanner.insights.saved": "Insights salvos com sucesso!",
+  "weeklyPlanner.insights.error": "Erro ao salvar insights",
+
+  // Dashboard tabs
+  "dashboard.tabs.config": "Configuração",
+  "dashboard.tabs.planner": "Pergaminho",
+
+  // Calendar export
+  "calendar.export": "Exportar para Google Calendar",
+  "calendar.export.loading": "Exportando...",
+  "calendar.export.success": "Exportado com sucesso! {count} eventos criados.",
+  "calendar.export.successOverwrite": "Exportado com sucesso! {count} eventos criados, {overwritten} substituídos.",
+  "calendar.export.error": "Erro ao exportar para o Google Calendar",
+  "calendar.export.noSlots": "Nenhuma atividade para exportar. Adicione atividades ao planner primeiro.",
+  "calendar.export.reconnect": "Reconectar Google Calendar",
+  "calendar.export.permissionRequired": "Permissão do Google Calendar necessária",
+  "calendar.export.lastExported": "Última exportação",
 };
 
 /**

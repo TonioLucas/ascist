@@ -2,12 +2,14 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Settings, CalendarDays, LogOut } from "lucide-react";
 import { useAuth } from "@/auth/useAuth";
 import { authOperations } from "@/auth/authOperations";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { t } from "@/lib/i18n";
-import { LogOut } from "lucide-react";
 import { PlannerConfig } from "./components";
+import { WeeklyPlanner } from "./planner";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -55,13 +57,32 @@ export default function DashboardPage() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-6">
           <h2 className="text-2xl font-bold">
             {t("dashboard.welcome", { name: displayName })}
           </h2>
         </div>
 
-        <PlannerConfig />
+        <Tabs defaultValue="planner" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="planner" className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4" />
+              {t("dashboard.tabs.planner")}
+            </TabsTrigger>
+            <TabsTrigger value="config" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              {t("dashboard.tabs.config")}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="planner">
+            <WeeklyPlanner />
+          </TabsContent>
+
+          <TabsContent value="config">
+            <PlannerConfig />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );

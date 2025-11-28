@@ -21,6 +21,11 @@ import type {
   PlannerConfigDoc,
   PlannerConfigRequest,
 } from "@/types/planner";
+import type {
+  WeeklyPlanDoc,
+  WeeklyPlanRequest,
+  SlotEntry,
+} from "@/types/weeklyPlan";
 
 // Example user type
 export interface UserDoc extends DocumentData {
@@ -140,5 +145,96 @@ export const plannerConfigOperations = {
       ...data,
       updatedAt: serverTimestamp(),
     });
+  },
+};
+
+// Weekly plan document path: users/{uid}/weeklyPlans/{weekStartISO}
+export function getWeeklyPlanRef(uid: string, weekStartISO: string): DocumentReference<WeeklyPlanDoc> {
+  if (!db || Object.keys(db).length === 0) {
+    return {} as DocumentReference<WeeklyPlanDoc>;
+  }
+  return doc(db, "users", uid, "weeklyPlans", weekStartISO) as DocumentReference<WeeklyPlanDoc>;
+}
+
+// Weekly plan operations
+export const weeklyPlanOperations = {
+  // Fetch weekly plan for a user
+  async fetch(uid: string, weekStartISO: string): Promise<WeeklyPlanDoc | null> {
+    try {
+      const planRef = getWeeklyPlanRef(uid, weekStartISO);
+      const planSnap = await getDoc(planRef);
+
+      if (!planSnap.exists()) {
+        return null;
+      }
+
+      return planSnap.data() as WeeklyPlanDoc;
+    } catch (error) {
+      console.error("Error fetching weekly plan:", error);
+      return null;
+    }
+  },
+
+  // Create or update weekly plan
+  async upsert(uid: string, data: WeeklyPlanRequest): Promise<void> {
+    const planRef = getWeeklyPlanRef(uid, data.weekStartISO);
+    await setDoc(planRef, {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  // Update a single slot
+  async updateSlot(uid: string, weekStartISO: string, slotId: string, entry: SlotEntry | null): Promise<void> {
+    const planRef = getWeeklyPlanRef(uid, weekStartISO);
+    const planSnap = await getDoc(planRef);
+
+    if (planSnap.exists()) {
+      const data = planSnap.data();
+      const newSlots = { ...data.slots };
+
+      if (entry) {
+        newSlots[slotId] = entry;
+      } else {
+        delete newSlots[slotId];
+      }
+
+      await updateDoc(planRef, {
+        slots: newSlots,
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      // Create new document with this slot
+      const slots: Record<string, SlotEntry> = {};
+      if (entry) {
+        slots[slotId] = entry;
+      }
+      await setDoc(planRef, {
+        weekStartISO,
+        slots,
+        insights: "",
+        updatedAt: serverTimestamp(),
+      });
+    }
+  },
+
+  // Update insights
+  async updateInsights(uid: string, weekStartISO: string, insights: string): Promise<void> {
+    const planRef = getWeeklyPlanRef(uid, weekStartISO);
+    const planSnap = await getDoc(planRef);
+
+    if (planSnap.exists()) {
+      await updateDoc(planRef, {
+        insights,
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      await setDoc(planRef, {
+        weekStartISO,
+        slots: {},
+        insights,
+        updatedAt: serverTimestamp(),
+      });
+    }
   },
 };

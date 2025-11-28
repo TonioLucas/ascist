@@ -38,9 +38,10 @@ if (typeof window !== "undefined" && firebaseApp) {
   analytics = getAnalytics(firebaseApp);
 }
 
-// Development environment emulators (optional)
-if (process.env.NODE_ENV === "development") {
-  // Use emulators in development
+// Development environment emulators (optional, controlled by env var)
+const useEmulators = process.env.NEXT_PUBLIC_USE_EMULATORS === "true";
+
+if (process.env.NODE_ENV === "development" && useEmulators) {
   console.log(
     "Using emulators in development mode, make sure to start them in back folder."
   );

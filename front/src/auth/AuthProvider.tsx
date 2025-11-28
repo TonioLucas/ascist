@@ -14,7 +14,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const isAuthenticated = !loading && user !== null && user.emailVerified;
+  // OAuth providers (Google), anonymous (token), and verified email users are authenticated
+  const isOAuthUser = user?.providerId === "google.com";
+  const isTokenUser = user?.isAnonymous === true;
+  const isAuthenticated = !loading && user !== null && (isOAuthUser || isTokenUser || user.emailVerified);
   const isAnonymous = user?.isAnonymous ?? false;
 
   const contextValue: AuthContextType = {

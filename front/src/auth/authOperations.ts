@@ -15,6 +15,9 @@ import {
 import { auth } from "@/lib/firebase";
 import { userOperations } from "@/lib/firestore";
 
+// Dev token from environment variable
+const DEV_TOKEN = process.env.NEXT_PUBLIC_DEV_AUTH_TOKEN;
+
 // Auth operations
 export const authOperations = {
   // Sign in with email and password
@@ -131,6 +134,37 @@ export const authOperations = {
       await sendEmailVerification(user);
     } catch (error) {
       console.error("Email verification error:", error);
+      throw error;
+    }
+  },
+
+  // Sign in with dev token (for development/testing)
+  async signInWithToken(token: string) {
+    if (!DEV_TOKEN) {
+      throw { code: "auth/token-not-configured", message: "Dev token not configured" };
+    }
+
+    if (token !== DEV_TOKEN) {
+      throw { code: "auth/invalid-token", message: "Invalid token" };
+    }
+
+    try {
+      // Use anonymous sign-in when token is valid
+      const result = await signInAnonymously(auth);
+
+      // Create/update user document for dev user
+      const existingUser = await userOperations.getById(result.user.uid);
+      if (!existingUser) {
+        await userOperations.create(result.user.uid, {
+          uid: result.user.uid,
+          displayName: "Dev User",
+          email: "dev@localhost",
+        });
+      }
+
+      return result.user;
+    } catch (error) {
+      console.error("Token sign in error:", error);
       throw error;
     }
   },

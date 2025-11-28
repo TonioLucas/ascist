@@ -1,4 +1,10 @@
 {
+  "hosting": {
+    "source": "./front",
+    "frameworksBackend": {
+      "region": "us-central1"
+    }
+  },
   "functions": [
     {
       "source": "./back",
@@ -21,6 +27,12 @@
     },
     "storage": {
       "port": 9199
+    },
+    "auth": {
+      "port": 9099
+    },
+    "hosting": {
+      "port": 5000
     },
     "ui": {
       "enabled": true,
